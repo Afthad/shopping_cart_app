@@ -50,12 +50,12 @@ class CheckedInPage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        TextEditingController controller =
-                            TextEditingController();
                         Get.bottomSheet(const NoOrderBottomSheet(),
                             backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)));
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20))));
                       },
                       child: options(
                           icon: const Icon(
