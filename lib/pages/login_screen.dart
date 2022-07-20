@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 30,
                         ),
                         !isOtp
-                            ? loginButton(
+                            ? cartButton(
                                 onTap: () {
                                   if (mobileNumber!.isNotEmpty &&
                                       mobileNumber!.length == 10) {
@@ -130,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   }
                                 },
                                 text: 'Send OTP')
-                            : loginButton(
+                            : cartButton(
                                 onTap: () {
                                   if (otp!.isNotEmpty && otp!.length == 4) {
                                     PrefsDb.saveLogin(true);
@@ -151,21 +151,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget loginButton({
-    required String text,
-    required VoidCallback onTap,
-  }) {
-    return MaterialButton(
-      minWidth: MediaQuery.of(context).size.width,
-      height: 44,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      onPressed: onTap,
-      color: AppColors.primaryColor,
-      child: textWidget(
-          color: Colors.white, text: text, fontWeight: FontWeight.w600),
     );
   }
 }
