@@ -75,14 +75,64 @@ class _CartScreenState extends State<CartScreen> {
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             child: controller.cartCount > 0
-                ? cartButton(
-                    onTap: () {
-                      PrefsDb.checkOut('Order-taken');
-                      Get.snackbar('Order placed successfully',
-                          'Order is placed successfully Now you will able to check out');
-                      Get.offAll(const CheckedInPage());
-                    },
-                    text: 'Place Order')
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          textWidget(
+                              text: 'Total',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                          textWidget(
+                              text: '₹ ${controller.totalPrice.toString()}',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold)
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      cartButton(
+                          onTap: () {
+                            PrefsDb.checkOut('Order-taken');
+                            Get.snackbar('Order placed successfully', '');
+
+                            Get.bottomSheet(
+                                WillPopScope(
+                                  onWillPop: () => Future.value(false),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(25.0),
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          textWidget(
+                                            text: 'Order Placed Successfully',
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          cartButton(
+                                              text: 'Go to CheckIn Screen',
+                                              onTap: () {
+                                                Get.offAll(
+                                                    const CheckedInPage());
+                                              })
+                                        ]),
+                                  ),
+                                ),
+                                backgroundColor: Colors.white,
+                                enableDrag: false,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20))));
+                          },
+                          text: 'Place Order'),
+                    ],
+                  )
                 : null,
           ),
         ));
@@ -129,7 +179,8 @@ class _CartScreenState extends State<CartScreen> {
                       height: 10,
                     ),
                     textWidget(
-                        text: '₹ ${product.prodMrp}',
+                        text:
+                            '₹ ${(double.parse(product.prodMrp.toString()) * cart.count)}',
                         color: Colors.green,
                         fontWeight: FontWeight.bold),
                     const SizedBox(

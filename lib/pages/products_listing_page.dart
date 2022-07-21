@@ -85,6 +85,7 @@ class _ProductsListingPageState extends State<ProductsListingPage> {
   }
 
   Widget productTile(Product product) {
+    controller.isProductExistInCart(product.prodId);
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -125,13 +126,46 @@ class _ProductsListingPageState extends State<ProductsListingPage> {
             const SizedBox(
               height: 10,
             ),
-            cartButton(
-                onTap: () {
-                  controller
-                      .addToCart(Cart(productId: product.prodId, count: 1));
-                  controller.getCartCount();
-                },
-                text: 'Add to cart')
+            !controller.isExists.value
+                ? cartButton(
+                    onTap: () {
+                      controller.addToCart(Cart(
+                          productId: product.prodId,
+                          count: 1,
+                          price: product.prodMrp));
+                      controller.getCartCount();
+                    },
+                    text: 'Add to cart')
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      cartButton(
+                          width: 100,
+                          height: 44,
+                          onTap: () {
+                            controller.reduceCount(product.prodId);
+                            controller.getCartCount();
+                          },
+                          text: '-'),
+                      textWidget(
+                          text: controller.cartItems
+                              .where((element) =>
+                                  element.productId == product.prodId)
+                              .first
+                              .count
+                              .toString(),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.orange),
+                      cartButton(
+                          width: 100,
+                          height: 44,
+                          onTap: () {
+                            controller.addCount(product.prodId);
+                            controller.getCartCount();
+                          },
+                          text: '+')
+                    ],
+                  )
           ],
         ),
       ),

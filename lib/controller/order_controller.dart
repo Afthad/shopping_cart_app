@@ -79,6 +79,7 @@ class OrderController extends GetxController {
         break;
       }
     }
+    isProductExistInCart(id);
   }
 
   reduceCount(int id) {
@@ -92,15 +93,41 @@ class OrderController extends GetxController {
         break;
       }
     }
+    isProductExistInCart(id);
   }
 
   deleteCartItem(int id) {
     cartItems.removeWhere((element) => element.productId == id);
+    isProductExistInCart(id);
   }
 
   RxInt cartCount = 0.obs;
   void getCartCount() {
     cartCount.value = cartItems.fold<int>(
         0, (previousValue, element) => element.count + previousValue);
+    getTotalPrice();
+  }
+
+  RxDouble totalPrice = 0.0.obs;
+  void getTotalPrice() {
+    totalPrice.value = cartItems.fold<double>(
+        0,
+        (previousValue, element) =>
+            (double.parse((element.price.toString())) * element.count) +
+            previousValue);
+  }
+
+  RxBool isExists = false.obs;
+  isProductExistInCart(
+    int prodId,
+  ) {
+    for (var e in cartItems) {
+      if (e.productId == prodId) {
+        isExists.value = true;
+        break;
+      } else {
+        isExists.value = false;
+      }
+    }
   }
 }
